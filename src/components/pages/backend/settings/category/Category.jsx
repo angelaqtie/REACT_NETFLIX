@@ -1,36 +1,30 @@
+import React from "react";
+import TableLoader from "../../partials/TableLoader";
 import {
   Archive,
   ArchiveRestore,
   FilePenLine,
-  FileVideo,
+  Plus,
   Trash2,
 } from "lucide-react";
-import React from "react";
-import Pills from "../partials/Pills";
-import IconServerError from "../partials/IconServerError";
-import LoadMore from "../partials/LoadMore";
-import SpinnerTable from "../partials/spinners/SpinnerTable";
-import TableLoader from "../partials/TableLoader";
-import IconNoData from "../partials/IconNoData";
+import IconNoData from "../../partials/IconNoData";
+import IconServerError from "../../partials/IconServerError";
+import Pills from "../../partials/Pills";
 import { StoreContext } from "@/components/store/storeContext";
 import {
   setIsAdd,
   setIsConfirm,
   setIsDelete,
-  setIsEdit,
-  setIsView,
 } from "@/components/store/storeAction";
-import ModalDelete from "../partials/modals/ModalDelete";
-import ModalConfirm from "../partials/modals/ModalConfirm";
+import ModalDelete from "../../partials/modals/ModalDelete";
+import ModalConfirm from "../../partials/modals/ModalConfirm";
+import ModalAddCategory from "./ModalAddCategory";
 
-const MoviesTable = () => {
+const Category = () => {
   const { store, dispatch } = React.useContext(StoreContext);
 
   const handleAdd = () => {
     dispatch(setIsAdd(true));
-  };
-  const handleView = () => {
-    dispatch(setIsView(true));
   };
   const handleDelete = () => {
     dispatch(setIsDelete(true));
@@ -43,42 +37,43 @@ const MoviesTable = () => {
   };
   return (
     <>
-      <div className="p-4 bg-secondary mt-10 rounded-md border border-line relative">
-        {/* <SpinnerTable /> */}
-        <div className="table-wrapper custom-scroll">
+      <div className="bg-secondary p-4 mt-5 border border-line rounded-md">
+        <button className="btn btn-add" onClick={handleAdd}>
+          <Plus size={16} />
+          Add New
+        </button>
+        <div className="table-wrapper custom-scroll mt-5 max-h-[60vh]">
           {/* <TableLoader count={20} cols={4} /> */}
           <table>
             <thead>
               <tr>
                 <th>#</th>
                 <th>Status</th>
-                <th>Title</th>
-                <th>Year</th>
-                <th>Duration</th>
+                <th className="w-[50%]">Category</th>
+
                 <th></th>
               </tr>
             </thead>
             <tbody>
               {/* <tr>
-              <td colSpan={100}>
-                <IconNoData />
-              </td>
-            </tr> */}
+                <td colSpan={100}>
+                  <IconNoData />
+                </td>
+              </tr>
 
-              {/* <tr>
-              <td colSpan={100}>
-                <IconServerError />
-              </td>
-            </tr> */}
-              {Array.from(Array(8).keys()).map((i) => (
+              <tr>
+                <td colSpan={100}>
+                  <IconServerError />
+                </td>
+              </tr> */}
+              {Array.from(Array(20).keys()).map((i) => (
                 <tr key={i}>
                   <td>{i + 1}.</td>
                   <td>
                     <Pills />
                   </td>
-                  <td>Unhappy for you</td>
-                  <td>2024</td>
-                  <td>1hr 40mins</td>
+                  <td>Rom-Com</td>
+
                   <td>
                     <ul className="table-action">
                       {true ? (
@@ -86,18 +81,8 @@ const MoviesTable = () => {
                           <li>
                             <button
                               className="tooltip"
-                              data-tooltip="View"
-                              onClick={() => handleView()}
-                            >
-                              <FileVideo />
-                            </button>
-                          </li>
-                          <li>
-                            <button
-                              className="tooltip"
                               data-tooltip="Edit"
                               onClick={() => handleAdd()}
-                             
                             >
                               <FilePenLine />
                             </button>
@@ -106,7 +91,7 @@ const MoviesTable = () => {
                             <button
                               className="tooltip"
                               data-tooltip="Archive"
-                              onClick={handleArchive}
+                              onClick={() => handleArchive()}
                             >
                               <Archive />
                             </button>
@@ -140,15 +125,13 @@ const MoviesTable = () => {
               ))}
             </tbody>
           </table>
-
-          <LoadMore />
         </div>
       </div>
-
+      {store.isAdd && <ModalAddCategory/>}
       {store.isDelete && <ModalDelete />}
       {store.isConfirm && <ModalConfirm />}
     </>
   );
 };
 
-export default MoviesTable;
+export default Category;
