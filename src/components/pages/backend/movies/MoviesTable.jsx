@@ -22,15 +22,20 @@ import {
 } from "@/components/store/storeAction";
 import ModalDelete from "../partials/modals/ModalDelete";
 import ModalConfirm from "../partials/modals/ModalConfirm";
+import { movies } from "./datamovies";
+import ModalView from "./ModalView";
 
 const MoviesTable = () => {
   const { store, dispatch } = React.useContext(StoreContext);
+  const [movieInfo, setMovieInfo] = React.useState("");
+  let counter = 1;
 
-  const handleAdd = () => {
+  const handleEdit = () => {
     dispatch(setIsAdd(true));
   };
-  const handleView = () => {
+  const handleView = (item) => {
     dispatch(setIsView(true));
+    setMovieInfo(item);
   };
   const handleDelete = () => {
     dispatch(setIsDelete(true));
@@ -52,7 +57,9 @@ const MoviesTable = () => {
               <tr>
                 <th>#</th>
                 <th>Status</th>
-                <th>Title</th>
+                <th className="w-[50%]" c>
+                  Title
+                </th>
                 <th>Year</th>
                 <th>Duration</th>
                 <th></th>
@@ -70,24 +77,24 @@ const MoviesTable = () => {
                 <IconServerError />
               </td>
             </tr> */}
-              {Array.from(Array(8).keys()).map((i) => (
-                <tr key={i}>
-                  <td>{i + 1}.</td>
+              {movies.map((item, key) => (
+                <tr key={key}>
+                  <td>{counter++}</td>
                   <td>
                     <Pills />
                   </td>
-                  <td>Unhappy for you</td>
-                  <td>2024</td>
-                  <td>1hr 40mins</td>
+                  <td>{item.movie_title}</td>
+                  <td>{item.movie_year}</td>
+                  <td>{item.movie_duration}</td>
                   <td>
                     <ul className="table-action">
-                      {true ? (
+                      {item.movie_is_active ? (
                         <>
                           <li>
                             <button
                               className="tooltip"
                               data-tooltip="View"
-                              onClick={() => handleView()}
+                              onClick={() => handleView(item)}
                             >
                               <FileVideo />
                             </button>
@@ -96,8 +103,7 @@ const MoviesTable = () => {
                             <button
                               className="tooltip"
                               data-tooltip="Edit"
-                              onClick={() => handleAdd()}
-                             
+                              onClick={() => handleEdit()}
                             >
                               <FilePenLine />
                             </button>
@@ -147,6 +153,7 @@ const MoviesTable = () => {
 
       {store.isDelete && <ModalDelete />}
       {store.isConfirm && <ModalConfirm />}
+      {store.isView && <ModalView movieInfo={movieInfo} />}
     </>
   );
 };

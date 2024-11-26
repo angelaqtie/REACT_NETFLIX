@@ -66,7 +66,6 @@ const Movies = () => {
       {store.error && <ModalError />}
       {store.success && <ToastSuccess />}
       {store.isAdd && <ModalAddMovie />}
-      {store.isView && <ModalView/>}
     </>
   );
 };
